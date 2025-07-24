@@ -1,0 +1,532 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Clean dark theme */
+    --background: 0 0% 8%; /* Deep black */
+    --foreground: 0 0% 98%; /* Clean white text */
+    --card: 0 0% 12%; /* Dark card background */
+    --card-foreground: 0 0% 98%; /* White text on cards */
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 210 100% 60%; /* Clean blue */
+    --primary-foreground: 0 0% 8%; /* Dark text on blue */
+    --secondary: 0 0% 15%; /* Dark secondary */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14%; /* Dark muted background */
+    --muted-foreground: 0 0% 65%; /* Light gray text */
+    --accent: 0 0% 16%;
+    --accent-foreground: 210 100% 60%; /* Blue accent text */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 20%; /* Dark borders */
+    --input: 0 0% 14%; /* Dark input background */
+    --ring: 210 100% 60%; /* Blue focus ring */
+    --radius: 0.75rem;
+    
+    /* Clean chemistry colors - soft, minimalistic */
+    --chemistry-alkali: 340 75% 85%;
+    --chemistry-alkaline: 45 85% 85%;
+    --chemistry-transition: 220 40% 85%;
+    --chemistry-post-transition: 160 35% 85%;
+    --chemistry-metalloid: 280 40% 85%;
+    --chemistry-nonmetal: 120 35% 85%;
+    --chemistry-halogen: 60 45% 85%;
+    --chemistry-noble-gas: 200 45% 85%;
+    --chemistry-lanthanide: 25 55% 85%;
+    --chemistry-actinide: 10 60% 85%;
+    --chemistry-unknown: 0 0% 88%;
+  }
+
+  .dark {
+    /* Dark mode - same as root */
+    --background: 0 0% 8%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 8%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 16%;
+    --accent-foreground: 210 100% 60%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 14%;
+    --ring: 210 100% 60%;
+    
+    /* Dark mode chemistry colors */
+    --chemistry-alkali: 340 60% 60%;
+    --chemistry-alkaline: 45 70% 60%;
+    --chemistry-transition: 220 40% 65%;
+    --chemistry-post-transition: 160 35% 65%;
+    --chemistry-metalloid: 280 40% 65%;
+    --chemistry-nonmetal: 120 35% 65%;
+    --chemistry-halogen: 60 45% 65%;
+    --chemistry-noble-gas: 200 45% 65%;
+    --chemistry-lanthanide: 25 55% 65%;
+    --chemistry-actinide: 10 60% 65%;
+    --chemistry-unknown: 0 0% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    font-family: 'Inter', 'Orbitron', 'Segoe UI', 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    border-radius: 0.75rem;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased font-inter;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    transition: all 0.2s ease;
+    background: #000;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    background: linear-gradient(90deg, #fff 0%, #60aaff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-family: 'Orbitron', 'Inter', 'Segoe UI', 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    letter-spacing: 0.01em;
+    font-weight: 900;
+    filter: drop-shadow(0 2px 8px rgba(96, 170, 255, 0.08));
+  }
+}
+
+@layer utilities {
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px) saturate(110%);
+    -webkit-backdrop-filter: blur(8px) saturate(110%);
+    border: 1px solid hsl(var(--border));
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.1),
+      0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+  }
+  
+  .glass-effect:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: hsl(var(--primary) / 0.3);
+    box-shadow: 
+      0 4px 6px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  .dark .glass-effect {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .dark .glass-effect:hover {
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .element-card-enhanced {
+    @apply glass-effect;
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .element-card-enhanced:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .element-highlighted {
+    background: hsl(var(--primary) / 0.1) !important;
+    border: 2px solid hsl(var(--primary)) !important;
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2) !important;
+    transform: scale(1.05) !important;
+    z-index: 50 !important;
+  }
+
+  /* Custom scrollbar for element details */
+  .custom-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+
+  /* Chemistry color classes with green theme */
+  .bg-chemistry-alkali-metal { background-color: hsl(var(--chemistry-alkali) / 0.8); }
+  .bg-chemistry-alkaline-earth-metal { background-color: hsl(var(--chemistry-alkaline) / 0.8); }
+  .bg-chemistry-transition-metal { background-color: hsl(var(--chemistry-transition) / 0.8); }
+  .bg-chemistry-post-transition-metal { background-color: hsl(var(--chemistry-post-transition) / 0.8); }
+  .bg-chemistry-metalloid { background-color: hsl(var(--chemistry-metalloid) / 0.8); }
+  .bg-chemistry-nonmetal { background-color: hsl(var(--chemistry-nonmetal) / 0.8); }
+  .bg-chemistry-halogen { background-color: hsl(var(--chemistry-halogen) / 0.8); }
+  .bg-chemistry-noble-gas { background-color: hsl(var(--chemistry-noble-gas) / 0.8); }
+  .bg-chemistry-lanthanide { background-color: hsl(var(--chemistry-lanthanide) / 0.8); }
+  .bg-chemistry-actinide { background-color: hsl(var(--chemistry-actinide) / 0.8); }
+  .bg-chemistry-unknown { background-color: hsl(var(--chemistry-unknown) / 0.8); }
+
+  .text-clean-accent {
+    color: hsl(var(--primary));
+  }
+
+  .clean-highlight {
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+  }
+
+  /* Enhanced Reaction Animations */
+  @keyframes plasma-pulse {
+    0%, 100% { 
+      transform: scale(1) rotate(0deg);
+      opacity: 0.7;
+    }
+    50% { 
+      transform: scale(1.2) rotate(180deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes radioactive-glow {
+    0%, 100% { 
+      transform: scale(1);
+      opacity: 0.5;
+      box-shadow: 0 0 10px #4ade80;
+    }
+    50% { 
+      transform: scale(1.1);
+      opacity: 1;
+      box-shadow: 0 0 25px #4ade80, 0 0 40px #22c55e;
+    }
+  }
+
+  @keyframes chemical-spiral {
+    0% { 
+      transform: rotate(0deg) translateX(50px) rotate(0deg);
+      opacity: 0.8;
+    }
+    100% { 
+      transform: rotate(360deg) translateX(50px) rotate(-360deg);
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes molecular-dance {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg) scale(1);
+    }
+    25% { 
+      transform: translateY(-10px) rotate(90deg) scale(1.1);
+    }
+    50% { 
+      transform: translateY(-5px) rotate(180deg) scale(0.9);
+    }
+    75% { 
+      transform: translateY(-15px) rotate(270deg) scale(1.2);
+    }
+  }
+
+  @keyframes quantum-flicker {
+    0%, 100% { 
+      opacity: 0.2;
+      transform: scale(1);
+    }
+    25% { 
+      opacity: 1;
+      transform: scale(1.5);
+    }
+    50% { 
+      opacity: 0.1;
+      transform: scale(0.5);
+    }
+    75% { 
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes electric-arc {
+    0%, 100% { 
+      opacity: 0.3;
+      transform: scaleY(0.8);
+    }
+    50% { 
+      opacity: 1;
+      transform: scaleY(1.2);
+    }
+  }
+
+  @keyframes flame-flicker {
+    0%, 100% { 
+      transform: scale(1) rotate(-2deg);
+      filter: blur(1px);
+    }
+    50% { 
+      transform: scale(1.1) rotate(2deg);
+      filter: blur(0.5px);
+    }
+  }
+
+  @keyframes wind-blow {
+    0% { 
+      transform: translateX(-20px);
+      opacity: 0;
+    }
+    50% { 
+      opacity: 1;
+    }
+    100% { 
+      transform: translateX(100vw);
+      opacity: 0;
+    }
+  }
+
+  @keyframes gas-rise {
+    0% { 
+      transform: translateY(0) scale(0.8);
+      opacity: 0.7;
+    }
+    100% { 
+      transform: translateY(-200px) scale(1.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes explosion-particle {
+    0% { 
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% { 
+      transform: translate(var(--x-move), var(--y-move)) scale(0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes splash-rise {
+    0% { 
+      transform: translateY(0) scale(1);
+      opacity: 0.8;
+    }
+    100% { 
+      transform: translateY(-50px) scale(0.5);
+      opacity: 0;
+    }
+  }
+
+  @keyframes powder-burst {
+    0% { 
+      transform: translate(0, 0) scale(1);
+      opacity: 0.9;
+    }
+    100% { 
+      transform: translate(var(--x-move), var(--y-move)) scale(0.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes rise {
+    0% { 
+      transform: translateY(0);
+      opacity: 0.8;
+    }
+    100% { 
+      transform: translateY(-150px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes reaction {
+    0%, 100% { 
+      transform: scale(1);
+    }
+    50% { 
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes shake {
+    0%, 100% { 
+      transform: translateX(0);
+    }
+    25% { 
+      transform: translateX(-2px);
+    }
+    75% { 
+      transform: translateX(2px);
+    }
+  }
+
+  @keyframes animate-fall {
+    0% { 
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    50% { 
+      opacity: 1;
+    }
+    100% { 
+      transform: translateY(200px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes shock-wave {
+    0% { 
+      transform: scale(0);
+      opacity: 1;
+      border-width: 4px;
+    }
+    50% { 
+      opacity: 0.6;
+      border-width: 2px;
+    }
+    100% { 
+      transform: scale(3);
+      opacity: 0;
+      border-width: 0px;
+    }
+  }
+
+  @keyframes crystal-formation {
+    0% { 
+      transform: scale(0) rotate(0deg);
+      opacity: 0;
+    }
+    50% { 
+      opacity: 0.8;
+    }
+    100% { 
+      transform: scale(1) rotate(180deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes vapor-rise {
+    0% { 
+      transform: translateY(20px) scale(0.5);
+      opacity: 0.9;
+      filter: blur(2px);
+    }
+    100% { 
+      transform: translateY(-100px) scale(2);
+      opacity: 0;
+      filter: blur(8px);
+    }
+  }
+
+  @keyframes particle-scatter {
+    0% { 
+      transform: translate(0, 0) rotate(0deg) scale(1);
+      opacity: 1;
+    }
+    100% { 
+      transform: translate(var(--x-move), var(--y-move)) rotate(720deg) scale(0.1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes vapour-splash {
+    0% { transform: translateY(0) scale(1); opacity: 0.5; }
+    60% { transform: translateY(-18px) scale(1.08); opacity: 0.4; }
+    100% { transform: translateY(-32px) scale(1.12); opacity: 0; }
+  }
+
+  @keyframes crystal-grow {
+    0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(10deg); opacity: 0.7; }
+    100% { transform: scale(1) rotate(0deg); opacity: 0; }
+  }
+
+  /* Hide Chatbase branding */
+  iframe[src*="chatbase"] {
+    border-radius: 12px;
+  }
+
+  .subheading-gradient {
+    background: linear-gradient(90deg, #fff 0%, #60aaff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    filter: drop-shadow(0 1px 4px rgba(96, 170, 255, 0.06));
+  }
+
+  .ultra-ripple {
+    animation: ultra-ripple 1.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+  .ultra-glass-refraction {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(96,170,255,0.08) 100%);
+    backdrop-filter: blur(10px) saturate(120%) contrast(1.1);
+    border: 1.5px solid rgba(255,255,255,0.18);
+    box-shadow: 0 4px 32px 0 rgba(96,170,255,0.12);
+  }
+  .ultra-spark-burst {
+    animation: ultra-spark-burst 0.7s cubic-bezier(0.7,0,0.84,0) infinite;
+  }
+  .ultra-swirl-vapor {
+    animation: ultra-swirl-vapor 2.5s linear infinite;
+  }
+  .ultra-plasma-glow {
+    animation: ultra-plasma-glow 1.8s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 24px #60aaffcc) drop-shadow(0 0 48px #fff2);
+  }
+
+  @keyframes ultra-ripple {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.7; }
+  }
+  @keyframes ultra-spark-burst {
+    0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    40% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+    100% { opacity: 0; transform: scale(0.7) rotate(360deg); }
+  }
+  @keyframes ultra-swirl-vapor {
+    0% { transform: rotate(0deg) translateX(0) scale(1); opacity: 0.7; }
+    50% { transform: rotate(180deg) translateX(10px) scale(1.1); opacity: 1; }
+    100% { transform: rotate(360deg) translateX(0) scale(1); opacity: 0.7; }
+  }
+  @keyframes ultra-plasma-glow {
+    0% { filter: drop-shadow(0 0 12px #60aaffcc); }
+    100% { filter: drop-shadow(0 0 48px #60aaffcc); }
+  }
+}
+
+/* Subtle Reaction Animation (fade) */
+@keyframes subtle-fade {
+  0% { opacity: 0.2; filter: blur(2px); }
+  30% { opacity: 0.5; filter: blur(0.5px); }
+  60% { opacity: 0.7; filter: blur(0); }
+  100% { opacity: 0.2; filter: blur(2px); }
+}
+.subtle-fade-anim {
+  animation: subtle-fade 2.5s ease-in-out infinite;
+  background: linear-gradient(120deg, #fff6, #a0c4ff44, #fff0);
+  border-radius: 1.5rem;
+}
+
+/* Enhanced Crystallization Animation */
+@keyframes crystal-sparkle {
+  0% { opacity: 0; transform: scale(0.7) rotate(0deg); filter: brightness(1.2); }
+  40% { opacity: 0.7; transform: scale(1.1) rotate(12deg); filter: brightness(1.5) drop-shadow(0 0 8px #b4e0ff); }
+  70% { opacity: 1; transform: scale(1) rotate(-8deg); filter: brightness(2) drop-shadow(0 0 16px #e0f7fa); }
+  100% { opacity: 0; transform: scale(1.2) rotate(0deg); filter: brightness(1.1); }
+}
+.crystal-sparkle-anim {
+  animation: crystal-sparkle 2.8s cubic-bezier(0.7,0,0.84,0) infinite;
+  background: linear-gradient(135deg, #e0f7fa 60%, #b4e0ff 100%, #fff0 100%);
+  border-radius: 1.5rem;
+}

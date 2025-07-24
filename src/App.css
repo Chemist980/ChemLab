@@ -1,0 +1,86 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.ios-liquid-glass {
+  background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(96,170,255,0.10) 100%);
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18), 0 1.5px 8px 0 rgba(96,170,255,0.10);
+  border: 1.5px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  position: relative;
+  overflow: hidden;
+}
+.ios-liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255,255,255,0.22) 0%, rgba(96,170,255,0.10) 100%);
+  opacity: 0.7;
+  border-radius: inherit;
+  z-index: 1;
+}
+.ios-liquid-glass::after {
+  content: '';
+  position: absolute;
+  top: 8px; left: 16px; right: 16px; height: 18px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 100%);
+  border-radius: 1.5rem;
+  opacity: 0.25;
+  filter: blur(2px);
+  z-index: 2;
+}
+
+.beaker-3d {
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10), 0 2px 16px 0 rgba(96,170,255,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.10);
+  border-radius: 1.5rem 1.5rem 2.5rem 2.5rem/1.2rem 1.2rem 2.5rem 2.5rem;
+  position: relative;
+}
+.beaker-glass-3d {
+  box-shadow: 0 2px 24px 0 rgba(96,170,255,0.10) inset, 0 0.5px 8px 0 rgba(255,255,255,0.10) inset;
+  border: 2px solid rgba(255,255,255,0.10);
+  background: linear-gradient(120deg, rgba(255,255,255,0.10) 0%, rgba(96,170,255,0.08) 100%);
+  border-radius: inherit;
+  position: relative;
+}
