@@ -21,6 +21,7 @@ const TopNav = () => {
 
   const navItems = [
     { path: '/', icon: Atom, label: 'Periodic Table' },
+    { path: '/interactive-lab', icon: Beaker, label: 'Interactive Lab' },
   ];
   return (
     <nav className={cn(

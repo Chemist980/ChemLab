@@ -8,6 +8,7 @@ import { useTheme } from "@/hooks/use-theme";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import FormulaBuilderPage from "./pages/FormulaBuilderPage";
+import InteractiveLabPage from "./pages/InteractiveLabPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import ActivityPage from "./pages/ActivityPage";
 import SourcesPage from "./pages/SourcesPage";
@@ -34,6 +35,11 @@ const App = () => {
               <Route path="/formula-builder" element={
                 <Layout>
                   <FormulaBuilderPage />
+                </Layout>
+              } />
+              <Route path="/interactive-lab" element={
+                <Layout>
+                  <InteractiveLabPage />
                 </Layout>
               } />
               <Route path="/analytics" element={
