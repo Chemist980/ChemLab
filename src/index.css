@@ -522,6 +522,40 @@
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
+
+  @keyframes gentle-float {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg); 
+    }
+    25% { 
+      transform: translateY(-8px) rotate(1deg); 
+    }
+    50% { 
+      transform: translateY(-4px) rotate(-1deg); 
+    }
+    75% { 
+      transform: translateY(-12px) rotate(0.5deg); 
+    }
+  }
+
+  .animate-gentle-float {
+    animation: gentle-float 4s ease-in-out infinite;
+  }
+
+  @keyframes substance-pulse {
+    0%, 100% { 
+      box-shadow: 0 0 20px var(--glow-color);
+      transform: scale(1);
+    }
+    50% { 
+      box-shadow: 0 0 30px var(--glow-color);
+      transform: scale(1.05);
+    }
+  }
+
+  .substance-glow {
+    animation: substance-pulse 3s ease-in-out infinite;
+  }
 }
 
 /* Subtle Reaction Animation (fade) */

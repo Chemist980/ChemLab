@@ -530,39 +530,57 @@ const InteractiveLabPage = () => {
             <CardContent>
               <div className="relative min-h-[500px] flex flex-col items-center justify-center">
                 {/* Substance Grid */}
-                <div className="mb-6 w-full">
-                  <div className="relative mb-4">
+                {/* Search Bar */}
+                <div className="absolute top-4 left-4 right-4 z-30">
+                  <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                     <Input
                       placeholder="Search 300+ substances..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
+                      className="pl-10 glass-effect border-primary/30 focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
-                  
-                  <ScrollArea className="h-32 w-full border rounded-lg p-2">
-                    <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
-                      {filteredSubstances.slice(0, 50).map((substance, index) => (
-                        <Button
-                          key={substance.name}
-                          variant="outline"
-                          className="h-16 w-full rounded-lg flex flex-col items-center justify-center text-xs font-bold transition-all duration-300 hover:scale-105"
-                          style={{ 
-                            backgroundColor: `${substance.color}20`,
+                </div>
+
+                {/* Floating Substances */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  {filteredSubstances.slice(0, 40).map((substance, index) => {
+                    const angle = (index * 137.5) % 360; // Golden angle for natural distribution
+                    const radius = 200 + (index % 3) * 80; // Varying distances from center
+                    const x = 50 + Math.cos(angle * Math.PI / 180) * (radius / 8);
+                    const y = 50 + Math.sin(angle * Math.PI / 180) * (radius / 8);
+                    
+                    return (
+                      <div
+                        key={substance.name}
+                        className="absolute pointer-events-auto animate-float cursor-pointer transition-all duration-300 hover:scale-110 hover:z-50"
+                        style={{
+                          left: `${Math.max(5, Math.min(90, x))}%`,
+                          top: `${Math.max(10, Math.min(80, y))}%`,
+                          animationDelay: `${index * 0.1}s`,
+                          animationDuration: `${3 + (index % 3)}s`
+                        }}
+                        onClick={() => handleSubstanceClick(substance)}
+                        title={`${substance.name} (${substance.formula}) - ${substance.category}`}
+                      >
+                        <div
+                          className="w-16 h-16 rounded-full flex flex-col items-center justify-center text-xs font-bold shadow-lg border-2 glass-effect"
+                          style={{
+                            backgroundColor: `${substance.color}40`,
                             borderColor: substance.color,
-                            color: substance.color
+                            color: substance.color,
+                            boxShadow: `0 0 20px ${substance.color}40`
                           }}
-                          onClick={() => handleSubstanceClick(substance)}
-                          disabled={droppedSubstances.length >= 2 || isReacting}
-                          title={`${substance.name} (${substance.formula}) - ${substance.category}`}
                         >
-                          <span className="truncate w-full text-center">{substance.name}</span>
-                          <span className="text-[0.6rem] opacity-70">{substance.formula}</span>
-                        </Button>
-                      ))}
-                    </div>
-                  </ScrollArea>
+                          <span className="text-[0.6rem] leading-tight text-center px-1 truncate w-full">
+                            {substance.name.length > 8 ? substance.name.substring(0, 6) + '..' : substance.name}
+                          </span>
+                          <span className="text-[0.5rem] opacity-70 leading-none">{substance.formula}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* Reaction Beaker - Same as periodic table page */}
