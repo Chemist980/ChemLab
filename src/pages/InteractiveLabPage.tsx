@@ -529,7 +529,6 @@ const InteractiveLabPage = () => {
             </CardHeader>
             <CardContent>
               <div className="relative min-h-[500px] flex flex-col items-center justify-center">
-                {/* Substance Grid */}
                 {/* Search Bar */}
                 <div className="absolute top-4 left-4 right-4 z-30">
                   <div className="relative">
@@ -543,13 +542,28 @@ const InteractiveLabPage = () => {
                   </div>
                 </div>
 
-                {/* Floating Substances */}
+                {/* Floating Substances - Outside beaker area */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                   {filteredSubstances.slice(0, 40).map((substance, index) => {
                     const angle = (index * 137.5) % 360; // Golden angle for natural distribution
-                    const radius = 200 + (index % 3) * 80; // Varying distances from center
-                    const x = 50 + Math.cos(angle * Math.PI / 180) * (radius / 8);
-                    const y = 50 + Math.sin(angle * Math.PI / 180) * (radius / 8);
+                    const radius = 180 + (index % 4) * 60; // Varying distances from center
+                    
+                    // Calculate position but avoid center beaker area (40% width, 60% height from bottom)
+                    let x = 50 + Math.cos(angle * Math.PI / 180) * (radius / 6);
+                    let y = 50 + Math.sin(angle * Math.PI / 180) * (radius / 6);
+                    
+                    // Avoid beaker area (center 40% width, bottom 60% height)
+                    if (x > 30 && x < 70 && y > 40) {
+                      // Push to edges if in beaker zone
+                      if (x < 50) {
+                        x = Math.max(5, x - 25); // Push left
+                      } else {
+                        x = Math.min(95, x + 25); // Push right
+                      }
+                      if (y > 60) {
+                        y = Math.max(15, y - 30); // Push up
+                      }
+                    }
                     
                     return (
                       <div
@@ -557,7 +571,7 @@ const InteractiveLabPage = () => {
                         className="absolute pointer-events-auto animate-float cursor-pointer transition-all duration-300 hover:scale-110 hover:z-50"
                         style={{
                           left: `${Math.max(5, Math.min(90, x))}%`,
-                          top: `${Math.max(10, Math.min(80, y))}%`,
+                          top: `${Math.max(15, Math.min(75, y))}%`,
                           animationDelay: `${index * 0.1}s`,
                           animationDuration: `${3 + (index % 3)}s`
                         }}
@@ -565,7 +579,7 @@ const InteractiveLabPage = () => {
                         title={`${substance.name} (${substance.formula}) - ${substance.category}`}
                       >
                         <div
-                          className="w-16 h-16 rounded-full flex flex-col items-center justify-center text-xs font-bold shadow-lg border-2 glass-effect"
+                          className="w-14 h-14 rounded-full flex flex-col items-center justify-center text-xs font-bold shadow-lg border-2 glass-effect hover:w-16 hover:h-16 transition-all duration-300"
                           style={{
                             backgroundColor: `${substance.color}40`,
                             borderColor: substance.color,
@@ -574,7 +588,7 @@ const InteractiveLabPage = () => {
                           }}
                         >
                           <span className="text-[0.6rem] leading-tight text-center px-1 truncate w-full">
-                            {substance.name.length > 8 ? substance.name.substring(0, 6) + '..' : substance.name}
+                            {substance.name.length > 7 ? substance.name.substring(0, 5) + '..' : substance.name}
                           </span>
                           <span className="text-[0.5rem] opacity-70 leading-none">{substance.formula}</span>
                         </div>
@@ -583,8 +597,8 @@ const InteractiveLabPage = () => {
                   })}
                 </div>
 
-                {/* Reaction Beaker - Same as periodic table page */}
-                <div className="absolute bottom-0 w-full h-full rounded-b-3xl rounded-t-lg overflow-hidden beaker-3d">
+                {/* Reaction Beaker - Centered and smaller to leave space for floating substances */}
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-80 rounded-b-3xl rounded-t-lg overflow-hidden beaker-3d">
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent border-2 border-gray-300/50 rounded-b-3xl rounded-t-lg backdrop-blur-sm shadow-2xl beaker-glass-3d">
                     <div className="absolute top-8 left-4 w-16 h-32 bg-white/25 rounded-full transform -rotate-12 blur-sm"></div>
                     <div className="absolute top-12 right-6 w-8 h-24 bg-white/20 rounded-full transform rotate-12 blur-sm"></div>
@@ -595,11 +609,11 @@ const InteractiveLabPage = () => {
                     <div className="absolute right-8 bottom-8 w-20 h-6 rounded-full bg-blue-200/20 blur-lg opacity-20 pointer-events-none" style={{ transform: 'rotate(12deg)' }} />
                     <div className="absolute inset-0 rounded-b-3xl rounded-t-lg pointer-events-none" style={{ boxShadow: 'inset 0 8px 32px 0 rgba(31,38,135,0.10), 0 2px 16px 0 rgba(96,170,255,0.08)' }} />
                   </div>
-                  <div className="absolute -top-[1px] left-[8%] w-[35%] h-5 border-t-2 border-l-2 border-r-2 border-gray-300/50 bg-gradient-to-b from-white/8 to-transparent" 
+                  <div className="absolute -top-[1px] left-[8%] w-[35%] h-5 border-t-2 border-l-2 border-r-2 border-gray-300/50 bg-gradient-to-b from-white/8 to-transparent"
                        style={{ clipPath: 'polygon(0 0, 85% 0, 100% 100%, 15% 100%)' }}>
                     <div className="absolute top-0 left-2 w-4 h-2 bg-white/15 rounded-full blur-sm"></div>
                   </div>
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-48 h-4 bg-black/15 rounded-full blur-lg"></div>
+                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-64 h-4 bg-black/15 rounded-full blur-lg"></div>
                 </div>
 
                 {/* Liquid and substances */}
@@ -630,7 +644,7 @@ const InteractiveLabPage = () => {
                       <div className="flex flex-wrap items-center justify-center gap-2 mb-2 mt-32">
                         {droppedSubstances.map((substance, index) => (
                           <div key={index} className={`${isReacting ? 'animate-shake' : ''}`}>
-                            <Badge variant="secondary" className="text-xs px-2 py-1">
+                                  <Badge variant="secondary" className="text-xs px-2 py-1 bg-white/20 text-white border-white/30">
                               {substance}
                             </Badge>
                           </div>
@@ -649,12 +663,13 @@ const InteractiveLabPage = () => {
                 </div>
 
                 {/* Clear button */}
-                <div className="absolute bottom-4 right-4">
+                <div className="absolute bottom-4 right-4 z-40">
                   <Button 
                     variant="outline" 
                     size="sm"
                     onClick={clearBeaker}
                     disabled={droppedSubstances.length === 0}
+                    className="glass-effect border-primary/30 hover:border-primary"
                   >
                     Clear
                   </Button>
