@@ -380,6 +380,7 @@ const InteractiveLabPage = () => {
 
   const handleSubstanceClick = (substance: Substance) => {
     if (droppedSubstances.length < 2) {
+      playSound('add'); // Play sound when adding substance
       const newDropped = [...droppedSubstances, substance.name];
       setDroppedSubstances(newDropped);
       
@@ -395,6 +396,7 @@ const InteractiveLabPage = () => {
 
   const performReaction = (reactants: string[]) => {
     setIsReacting(true);
+    playSound('reaction'); // Play reaction sound
     const combo1 = `${reactants[0]}+${reactants[1]}`;
     const combo2 = `${reactants[1]}+${reactants[0]}`;
     const heatCombo = reactants.includes('Sugar') && temperature[0] >= 300 ? 'Sugar+Heat' : null;
@@ -410,6 +412,7 @@ const InteractiveLabPage = () => {
           toast.success('Reaction successful!');
           
           if (reaction.type === 'explosion') {
+            playSound('explosion'); // Play explosion sound
             triggerExplosion();
           }
         } else {
@@ -568,7 +571,7 @@ const InteractiveLabPage = () => {
                     return (
                       <div
                         key={substance.name}
-                        className="absolute pointer-events-auto animate-float cursor-pointer transition-all duration-300 hover:scale-110 hover:z-50"
+                        className="absolute pointer-events-auto animate-float cursor-pointer transition-all duration-300 hover:scale-110 hover:z-50 select-none"
                         style={{
                           left: `${Math.max(5, Math.min(90, x))}%`,
                           top: `${Math.max(15, Math.min(75, y))}%`,
@@ -576,6 +579,7 @@ const InteractiveLabPage = () => {
                           animationDuration: `${3 + (index % 3)}s`
                         }}
                         onClick={() => handleSubstanceClick(substance)}
+                        onMouseDown={(e) => e.preventDefault()}
                         title={`${substance.name} (${substance.formula}) - ${substance.category}`}
                       >
                         <div
@@ -598,8 +602,10 @@ const InteractiveLabPage = () => {
                 </div>
 
                 {/* Reaction Beaker - Centered and smaller to leave space for floating substances */}
-                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-80 rounded-b-3xl rounded-t-lg overflow-hidden beaker-3d">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent border-2 border-gray-300/50 rounded-b-3xl rounded-t-lg backdrop-blur-sm shadow-2xl beaker-glass-3d">
+                <div 
+                  className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-80 rounded-b-3xl rounded-t-lg overflow-hidden beaker-3d transition-all duration-500 ${getBeakerStyle(temperature[0])}`}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent border-2 rounded-b-3xl rounded-t-lg backdrop-blur-sm shadow-2xl beaker-glass-3d transition-all duration-500 ${getBeakerBorderStyle(temperature[0])}`}>
                     <div className="absolute top-8 left-4 w-16 h-32 bg-white/25 rounded-full transform -rotate-12 blur-sm"></div>
                     <div className="absolute top-12 right-6 w-8 h-24 bg-white/20 rounded-full transform rotate-12 blur-sm"></div>
                     <div className="absolute bottom-16 left-8 w-12 h-16 bg-white/15 rounded-full transform -rotate-45 blur-sm"></div>
@@ -609,7 +615,7 @@ const InteractiveLabPage = () => {
                     <div className="absolute right-8 bottom-8 w-20 h-6 rounded-full bg-blue-200/20 blur-lg opacity-20 pointer-events-none" style={{ transform: 'rotate(12deg)' }} />
                     <div className="absolute inset-0 rounded-b-3xl rounded-t-lg pointer-events-none" style={{ boxShadow: 'inset 0 8px 32px 0 rgba(31,38,135,0.10), 0 2px 16px 0 rgba(96,170,255,0.08)' }} />
                   </div>
-                  <div className="absolute -top-[1px] left-[8%] w-[35%] h-5 border-t-2 border-l-2 border-r-2 border-gray-300/50 bg-gradient-to-b from-white/8 to-transparent"
+                  <div className={`absolute -top-[1px] left-[8%] w-[35%] h-5 border-t-2 border-l-2 border-r-2 bg-gradient-to-b from-white/8 to-transparent transition-all duration-500 ${getBeakerBorderStyle(temperature[0])}`}
                        style={{ clipPath: 'polygon(0 0, 85% 0, 100% 100%, 15% 100%)' }}>
                     <div className="absolute top-0 left-2 w-4 h-2 bg-white/15 rounded-full blur-sm"></div>
                   </div>
@@ -619,9 +625,10 @@ const InteractiveLabPage = () => {
                 {/* Liquid and substances */}
                 <div 
                   ref={beakerRef}
-                  className={`absolute bottom-0 w-full transition-all duration-700 ease-out overflow-hidden rounded-b-2xl ${droppedSubstances.length > 0 ? 'h-[70%]' : 'h-[15%]'}`}
+                  className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-80 transition-all duration-700 ease-out overflow-hidden rounded-b-3xl rounded-t-lg ${droppedSubstances.length > 0 ? '' : ''}`}
                 >
-                  <div className={`w-full h-full relative bg-gradient-to-b from-blue-100/50 to-blue-200/40 dark:from-blue-800/40 dark:to-blue-700/30 ${isReacting ? 'animate-pulse' : ''}`}>
+                  <div className={`w-full transition-all duration-700 ease-out overflow-hidden rounded-b-3xl ${droppedSubstances.length > 0 ? 'h-[70%]' : 'h-[15%]'} absolute bottom-0`}>
+                    <div className={`w-full h-full relative ${getLiquidColor(temperature[0])} ${isReacting ? 'animate-pulse' : ''}`}>
                     <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-b from-white/60 via-white/30 to-transparent rounded-full"></div>
                     <div className="absolute inset-x-2 top-0 h-1 bg-white/40 rounded-full"></div>
                     
@@ -658,6 +665,7 @@ const InteractiveLabPage = () => {
                           </p>
                         </div>
                       )}
+                    </div>
                     </>
                   )}
                 </div>
@@ -781,7 +789,7 @@ const InteractiveLabPage = () => {
                     {chatMessages.map((message, index) => (
                       <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-[80%] p-2 rounded-lg text-xs ${
-                          message.role === 'user' 
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-80 flex flex-col items-center justify-center p-4 pt-8 pb-4">
                             ? 'bg-primary text-primary-foreground' 
                             : 'bg-muted text-muted-foreground'
                         }`}>
@@ -811,7 +819,7 @@ const InteractiveLabPage = () => {
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     className="flex-1 text-sm"
-                  />
+                <div className="absolute bottom-4 right-8 z-40">
                   <Button 
                     size="sm" 
                     onClick={sendMessage}
@@ -853,3 +861,86 @@ const InteractiveLabPage = () => {
 };
 
 export default InteractiveLabPage;
+  // Helper functions for temperature effects
+  const getBeakerStyle = (temp: number) => {
+    if (temp < 0) return 'shadow-blue-400/50';
+    if (temp < 100) return 'shadow-primary/50';
+    if (temp < 500) return 'shadow-orange-400/50';
+    return 'shadow-red-400/50 animate-pulse';
+  };
+
+  const getBeakerBorderStyle = (temp: number) => {
+    if (temp < 0) return 'border-blue-400/50';
+    if (temp < 100) return 'border-gray-300/50';
+    if (temp < 500) return 'border-orange-400/50';
+    return 'border-red-400/50';
+  };
+
+  const getLiquidColor = (temp: number) => {
+    if (temp < 0) return 'bg-gradient-to-b from-blue-200/60 to-blue-400/50';
+    if (temp < 100) return 'bg-gradient-to-b from-blue-100/50 to-blue-200/40 dark:from-blue-800/40 dark:to-blue-700/30';
+    if (temp < 500) return 'bg-gradient-to-b from-orange-200/60 to-orange-400/50';
+    return 'bg-gradient-to-b from-red-200/60 to-red-400/50';
+  };
+
+  // Sound effect function
+  const playSound = (soundType: 'add' | 'reaction' | 'explosion') => {
+    try {
+      // Create audio context for sound effects
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      
+      if (soundType === 'add') {
+        // Create a pleasant "plop" sound for adding substances
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      } else if (soundType === 'reaction') {
+        // Create a bubbling sound for reactions
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+        oscillator.frequency.setValueAtTime(500, audioContext.currentTime + 0.1);
+        oscillator.frequency.setValueAtTime(200, audioContext.currentTime + 0.2);
+        
+        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+        gainNode.gain.setValueAtTime(0.01, audioContext.currentTime + 0.3);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+      } else if (soundType === 'explosion') {
+        // Create an explosion sound
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(100, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.2);
+        
+        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2);
+      }
+    } catch (error) {
+      // Fallback if audio context fails
+      console.log('Audio not available');
+    }
+  };
